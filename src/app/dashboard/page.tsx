@@ -1,7 +1,9 @@
+import { ProfilePage } from "@/src/components/dashboard/header/profile-page"
+
 export default function Page(){
     return(
-        <h1>
-            This page belongs to dashboard
-        </h1>
+        <div>
+            <ProfilePage/>
+        </div>
     )
 }
