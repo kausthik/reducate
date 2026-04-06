@@ -1,7 +1,11 @@
+import { Heading } from "@/src/components/courses/heading";
+import { CoursePage } from "@/src/components/courses/course-page";
+
 export default function Page(){
     return(
-        <h1>
-            This page belongs to courses page
-        </h1>
+       <div>
+        <Heading/>
+        <CoursePage/>
+       </div>
     )
 }
