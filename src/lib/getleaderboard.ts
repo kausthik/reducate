@@ -1,3 +1,5 @@
+import { getUserData } from "@/src/lib/graphql"
+
 export async function getLeaderboard() {
   const users = [
     "kk_gangwar",

@@ -30,7 +30,7 @@ export const categories : category[]= [
   },
   {
     name: "Contest",
-    slug: "contest",
+    slug: "rating",
     icon: "🏆",
     desc: "Competitive rating",
     color: "bg-blue-50 border border-blue-200 text-blue-700",
@@ -44,7 +44,7 @@ export const categories : category[]= [
   },
   {
     name: "Overall",
-    slug: "overall",
+    slug: "total",
     icon: "🔥",
     desc: "Total performance",
    color: "bg-blue-50 border border-blue-200 text-blue-700"
