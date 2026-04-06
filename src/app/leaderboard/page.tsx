@@ -1,59 +1,16 @@
 import Link from "next/link";
+import { categories } from "@/src/config/category-data";
 
-const categories = [
-  {
-    name: "Easy",
-    slug: "easy",
-    icon: "🟢",
-    desc: "Basic problems",
-    color: "bg-green-100 text-green-700",
-  },
-  {
-    name: "Medium",
-    slug: "medium",
-    icon: "🟡",
-    desc: "Intermediate problems",
-    color: "bg-yellow-100 text-yellow-700",
-  },
-  {
-    name: "Hard",
-    slug: "hard",
-    icon: "🔴",
-    desc: "Advanced problems",
-    color: "bg-red-100 text-red-700",
-  },
-  {
-    name: "Contest",
-    slug: "contest",
-    icon: "🏆",
-    desc: "Competitive rating",
-    color: "bg-purple-100 text-purple-700",
-  },
-  {
-    name: "Today's Problem",
-    slug: "daily",
-    icon: "📅",
-    desc: "Daily streak",
-    color: "bg-blue-100 text-blue-700",
-  },
-  {
-    name: "Overall",
-    slug: "overall",
-    icon: "🔥",
-    desc: "Total performance",
-    color: "bg-gray-200 text-gray-800",
-  },
-];
 
 export default function LeaderboardHome() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-6">
+    <div className="min-h-screen p-6">
       <h1 className="text-4xl font-bold text-center mb-2">
         🏆 Leaderboard Dashboard
       </h1>
 
       <p className="text-center text-gray-600 mb-10">
-        Track performance across different coding categories
+        Track Performance and compete with your friends
       </p>
 
       <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-6">
