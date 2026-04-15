@@ -6,8 +6,6 @@ type Props = {
 }
 
 export function Leaderboard({ category, data }: Props) {
-
-  console.log(data)
   
   const getScore = (user: User) => {
     if (category === "easy") return user.easy
@@ -22,11 +20,6 @@ export function Leaderboard({ category, data }: Props) {
 
   const topThree = sortedData.slice(0, 3)
   const others = sortedData.slice(3)
- 
-  console.log("top three")
-  console.log(topThree)
-  console.log("others")
-  console.log(others)
 
 
   return (
@@ -63,15 +56,18 @@ export function Leaderboard({ category, data }: Props) {
         {others.map((user, index) => (
           <div
             key={user.username}
-            className="flex justify-between items-center border rounded-xl p-4 hover:bg-gray-100 transition"
+            className="flex justify-between items-center border rounded-xl p-4 hover:bg-gray-100 transition relative"
           >
-            <span className="font-semibold">
+            <div className="font-semibold">
               #{index + 4} {user.username}
-            </span>
+            </div>
 
-            <span className="text-blue-600 font-bold">
-              {getScore(user)}
-            </span>
+            <div className="text-blue-600 font-bold">
+              {getScore(user)} / {
+              (index==0)? <span className="text-sm font-bold text-taupe-900">-{getScore(topThree[2]) - getScore(others[index])}</span>  : <span className="text-sm font-bold text-taupe-900">-{getScore(others[index-1]) - getScore(others[index])}</span>
+            }
+            </div>
+            
           </div>
         ))}
       </div>
