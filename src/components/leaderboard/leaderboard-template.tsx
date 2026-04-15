@@ -22,6 +22,11 @@ export function Leaderboard({ category, data }: Props) {
 
   const topThree = sortedData.slice(0, 3)
   const others = sortedData.slice(3)
+ 
+  console.log("top three")
+  console.log(topThree)
+  console.log("others")
+  console.log(others)
 
 
   return (
@@ -34,7 +39,7 @@ export function Leaderboard({ category, data }: Props) {
         {topThree.map((user, index) => (
           <div
             key={user.username}
-            className="flex flex-col items-center justify-center border rounded-xl p-4 shadow-md bg-white"
+            className="flex flex-col items-center justify-center border rounded-xl p-4 shadow-md bg-white relative"
           >
             <div className="text-2xl font-bold">
               {index === 0 && "🥇"}
@@ -47,6 +52,9 @@ export function Leaderboard({ category, data }: Props) {
             <p className="text-lg font-bold text-blue-600">
               {getScore(user)}
             </p>
+            {
+              (index!=0)? <p className="text-sm absolute top-1 right-2 font-bold"> - {getScore(topThree[index-1]) - getScore(topThree[index])}</p>: <></>
+            }
           </div>
         ))}
       </div>
