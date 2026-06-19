@@ -4,7 +4,6 @@ export default function ProblemBreakdown() {
       <h3 className="text-gray-400 mb-4">PROBLEM BREAKDOWN</h3>
 
       <div className="flex items-center gap-6">
-        {/* Replace with Chart */}
         <div className="w-32 h-32 bg-gray-800 rounded-full border-4 border-red-500 flex items-center justify-center">
           487
         </div>
