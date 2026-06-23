@@ -5,8 +5,8 @@ import { Navbar } from "@/src/components/navbar/navbar"
 
 
 export const metadata: Metadata = {
-  title: "Leetcode-ranking",
-  description: "Compete with friends",
+  title: "Personal_tracker",
+  description: "Compete yourself",
 };
 
 export default function RootLayout({
