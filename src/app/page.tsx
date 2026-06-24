@@ -1,7 +1,8 @@
 export default function Home() {
   return (
     <div>
-      Hy
+      Go to page login
+      then calorie-tracker
     </div>
   );
 }

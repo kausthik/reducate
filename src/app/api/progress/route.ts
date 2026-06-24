@@ -13,7 +13,6 @@ export async function GET(req: NextRequest) {
 
     const days = Number(req.nextUrl.searchParams.get("days") || "30");
 
-    // Build date range
     const dates: string[] = [];
     for (let i = days - 1; i >= 0; i--) {
       const d = new Date();

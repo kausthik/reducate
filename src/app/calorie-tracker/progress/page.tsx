@@ -12,8 +12,7 @@ export default async function ProgressPage() {
   if (!session?.user) redirect("/login");
 
   const userId = (session.user as { id: string }).id;
-
-  // Last 30 days
+  
   const dates: string[] = [];
   for (let i = 29; i >= 0; i--) {
     const d = new Date();
