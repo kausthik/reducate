@@ -191,9 +191,10 @@ export default function ProgressClient({
   const activeDays = calendarData.filter((d) => d.consumed > 0).length;
   const avgConsumed = activeDays ? Math.round(calendarData.filter(d => d.consumed > 0).reduce((s, d) => s + d.consumed, 0) / activeDays) : 0;
   const avgBurned = activeDays ? Math.round(calendarData.filter(d => d.burned > 0).reduce((s, d) => s + d.burned, 0) / Math.max(1, calendarData.filter(d => d.burned > 0).length)) : 0;
-  const daysUnderGoal = calendarData.filter((d) => d.consumed > 0 && d.consumed <= dailyCalorieTarget).length;
-  const weightLoss = ((1550 - (avgConsumed-avgBurned))*activeDays)/7770
-
+  const daysUnderGoal = calendarData.filter((d) => d.consumed > 0 && d.net <= dailyCalorieTarget).length;
+  // console.log(calendarData)
+  const calorieLoss = (1550 - (avgConsumed-avgBurned))*activeDays;
+  const weightLoss = calorieLoss/7770;
   const latestWeight = weightLogs.length ? weightLogs[weightLogs.length - 1] : null;
   const firstWeight = weightLogs.length ? weightLogs[0] : null;
   const weightChange = latestWeight && firstWeight ? (latestWeight.weightKg - firstWeight.weightKg) : null;
@@ -241,6 +242,7 @@ export default function ProgressClient({
                 { label: "Avg. burned", value: avgBurned, unit: "kcal/day", color: "#10b981" },
                 { label: "Days under goal", value: daysUnderGoal, unit: `of ${activeDays}`, color: "#a78bfa" },
                 { label: "Total Weight Reduced", value: weightLoss, unit: `kg`, color: "#a78bfa" },
+                { label: "total calories deficit in last 30 days", value: calorieLoss, unit: `kcal`, color: "#a78bfa" },
               ].map((s) => (
                 <div key={s.label} style={{ background: "#16161a", border: "1px solid #1e1e24", borderRadius: 14, padding: "18px 20px" }}>
                   <div style={{ fontSize: 22, fontWeight: 700, color: s.color, letterSpacing: "-0.02em" }}>{s.value.toLocaleString()}</div>
@@ -302,7 +304,7 @@ export default function ProgressClient({
               <h3 style={{ margin: "0 0 16px", fontSize: 14, fontWeight: 600 }}>30-day calorie adherence</h3>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
                 {calendarData.map((d) => {
-                  const pct = d.consumed / dailyCalorieTarget;
+                  const pct = d.net / dailyCalorieTarget;
                   let bg = "#1e1e24";
                   if (d.consumed === 0) bg = "#1e1e24";
                   else if (pct <= 1) bg = `rgba(99,102,241,${0.3 + pct * 0.7})`;
