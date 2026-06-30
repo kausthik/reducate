@@ -1,15 +1,17 @@
 import Link from "next/link";
 import { categories } from "@/src/config/category-data";
+import { blackOps } from "../../layout";
+import { caveat } from "../../layout";
 
 
 export default function LeaderboardHome() {
   return (
     <div className="min-h-screen p-6">
-      <h1 className="text-4xl font-bold text-center mb-2">
-        🏆 Leaderboard Dashboard
+      <h1 className={`text-4xl font-bold text-center mb-2 ${blackOps.className}`}>
+        Leaderboard Dashboard
       </h1>
 
-      <p className="text-center text-gray-600 mb-10">
+      <p className={`text-lg text-center text-gray-600 mb-10 ${caveat.className}`}>
         Track Performance and compete with your friends
       </p>
 

@@ -1,5 +1,8 @@
+"use client"
+import { blackOps } from "@/src/app/layout"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 import {
   Card,
   CardAction,
@@ -14,7 +17,8 @@ type props = {
     data : servicesType,
 }
 
-export default async function ServicesPage({data} : props) {
+export default function ServicesPage({data} : props) {
+    const router = useRouter();
    
   return (
     <Card className="relative mx-auto w-full max-w-sm pt-0">
@@ -34,7 +38,7 @@ export default async function ServicesPage({data} : props) {
         </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Button className="w-full">Enter</Button>
+      <Button className="w-full" onClick={() => router.push(`${data.link}`)}>Enter</Button>
       </CardFooter>
     </Card>
   )

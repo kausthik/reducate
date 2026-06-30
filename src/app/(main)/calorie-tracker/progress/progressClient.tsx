@@ -20,6 +20,8 @@ function formatDate(dateStr: string) {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
+const dailyCalorieUsage = 1550;
+
 function SVGLineChart({
   data, yKey, color, targetLine, label, unit,
 }: {
@@ -139,6 +141,15 @@ function SVGBarChart({ data, target }: { data: DayData[]; target: number }) {
 
   return (
     <svg viewBox={`0 0 ${W} ${H + PT + PB}`} style={{ width: "100%", height: "auto" }}>
+
+      <line
+        x1={PL} x2={W - PR}
+        y1={PT + (1 - dailyCalorieUsage / maxV) * H}
+        y2={PT + (1 - dailyCalorieUsage / maxV) * H}
+        stroke="#f59e0b" strokeWidth={1} strokeDasharray="4 3"
+      />
+      <text x={W - PR - 5} y={PT + (1 - dailyCalorieUsage / maxV) * H - 1} fontSize={8} fill="#f59e0b">Edge Line</text>
+
       <line
         x1={PL} x2={W - PR}
         y1={PT + (1 - target / maxV) * H}

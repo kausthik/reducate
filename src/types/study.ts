@@ -1,0 +1,43 @@
+export enum Subject {
+  DSA = "DSA",
+  OPERATING_SYSTEM = "OPERATING_SYSTEM",
+  DBMS = "DBMS",
+  COMPUTER_NETWORKS = "COMPUTER_NETWORKS",
+  OOPS = "OOPS",
+  WEB_DEVELOPMENT = "WEB_DEVELOPMENT",
+  APTITUDE = "APTITUDE",
+}
+
+export enum Difficulty {
+  EASY = "EASY",
+  MEDIUM = "MEDIUM",
+  HARD = "HARD",
+}
+
+export enum SourceType {
+  YOUTUBE = "YOUTUBE",
+  WEBSITE = "WEBSITE",
+  BOOK = "BOOK",
+  COURSE = "COURSE",
+  LEETCODE = "LEETCODE",
+  NOTES = "NOTES",
+}
+
+
+export interface Source {
+  type: SourceType;
+  name: string;
+  url?: string;
+}
+
+export interface StudyTopic {
+  id: string;
+  userId: string;
+  subject: Subject;
+  title: string;
+  difficulty: Difficulty;
+  sources: Source[];
+  studiedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
