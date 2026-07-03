@@ -1,6 +1,5 @@
 "use client"
-import { blackOps } from "@/src/app/layout"
-import { Badge } from "@/components/ui/badge"
+// import { Badge } from "@/src/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import {
@@ -30,7 +29,7 @@ export default function ServicesPage({data} : props) {
       />
       <CardHeader>
         <CardAction>
-          <Badge variant="secondary">Featured</Badge>
+          {/* <Badge variant="secondary">Featured</Badge> */}
         </CardAction>
         <CardTitle className="font-bold">{data.title}</CardTitle>
         <CardDescription className="font-semibold text-blue-800">

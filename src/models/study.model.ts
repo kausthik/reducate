@@ -1,29 +1,5 @@
 import { Schema, model, models, InferSchemaType } from "mongoose";
-
-export enum Subject {
-  DSA = "DSA",
-  OPERATING_SYSTEM = "OPERATING_SYSTEM",
-  DBMS = "DBMS",
-  COMPUTER_NETWORKS = "COMPUTER_NETWORKS",
-  OOPS = "OOPS",
-  WEB_DEVELOPMENT = "WEB_DEVELOPMENT",
-  APTITUDE = "APTITUDE",
-}
-
-export enum Difficulty {
-  EASY = "EASY",
-  MEDIUM = "MEDIUM",
-  HARD = "HARD",
-}
-
-export enum SourceType {
-  YOUTUBE = "YOUTUBE",
-  WEBSITE = "WEBSITE",
-  BOOK = "BOOK",
-  COURSE = "COURSE",
-  LEETCODE = "LEETCODE",
-  NOTES = "NOTES",
-}
+import { Difficulty, SourceType, Subject } from "@/src/types/study"
 
 const sourceSchema = new Schema(
   {
@@ -41,11 +17,12 @@ const sourceSchema = new Schema(
 
     url: {
       type: String,
-      default: "",
       trim: true,
     },
   },
-  { _id: false }
+  {
+    _id: false,
+  }
 );
 
 const studySchema = new Schema(
@@ -69,6 +46,13 @@ const studySchema = new Schema(
       trim: true,
     },
 
+    normalizedTitle: {
+      type: String,
+      required: true,
+      trim: true,
+      set: (value: string) => value.trim().toLowerCase(),
+    },
+    
     difficulty: {
       type: String,
       enum: Object.values(Difficulty),
@@ -80,13 +64,38 @@ const studySchema = new Schema(
       default: [],
     },
 
-    studiedAt: {
+    studyCount: {
+      type: Number,
+      default: 1,
+      min: 1,
+    },
+
+    firstStudiedAt: {
+      type: Date,
+      default: Date.now,
+    },
+
+    lastStudiedAt: {
       type: Date,
       default: Date.now,
     },
   },
   {
     timestamps: true,
+  }
+);
+
+
+// Prevent duplicate study topics for the same user within the same subject.
+// Compound unique index to prevent duplicate study topics per user and subject.
+studySchema.index(
+  {
+    userId: 1,
+    subject: 1,
+    normalizedTitle : 1,
+  },
+  {
+    unique: true,
   }
 );
 

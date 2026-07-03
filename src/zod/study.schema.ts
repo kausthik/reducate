@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Difficulty, SourceType, Subject } from "@/src/models/study.model";
+import { Difficulty, SourceType, Subject } from "@/src/types/study"
 
 export const sourceSchema = z.object({
   type: z.enum(SourceType),
@@ -33,7 +33,7 @@ export const createStudySchema = z.object({
 
   difficulty: z.enum(Difficulty),
 
-  sources: z.array(sourceSchema).default([]),
+  sources: z.array(sourceSchema),
 });
 
 export type CreateStudyInput = z.infer<typeof createStudySchema>;
