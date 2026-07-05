@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,10 +6,10 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 
-import { Plus } from "lucide-react";
 
 import StudiedTopicItem from "./studied-topic-item";
 import { RegisterStudiedTopic } from "./study/add-topic-dialog";
+import { getTodayStudiesAction } from "@/src/actions/study.action";
 
 type topicType = {
     subject: string, 
@@ -41,7 +40,19 @@ const topics : topicType[] = [
   },
 ];
 
-export default function StudiedTopicsCard() {
+
+export  default function StudiedTopicsCard() {
+
+// const [data, setData] = useState([]);
+
+// useEffect(() => {
+//   async function fetchStudies() {
+//     const studies = await getTodayStudiesAction();
+//     setData(studies);
+//   }
+//   fetchStudies();
+// }, []);
+  
   return (
     <Card className="ml-5 mr-2.5">
       <CardHeader className="flex flex-row items-center justify-between">

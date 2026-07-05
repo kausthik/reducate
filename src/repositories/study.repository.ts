@@ -1,48 +1,65 @@
-import { Subject } from "@/src/types/study";
-import { Study } from "@/src/models/study.model";
+import { StudyRespositoryType } from "../types/study";
+import { Study } from "../models/study.model";
 import { Types } from "mongoose";
+import { Subject } from "../types/study";
 
-
-// Record means "an object whose keys and values follow a specific rule."
-// <string, unknown> means string key is allowed only, value may be any datatype
 class StudyRepository {
-  async create(data: Record<string, unknown>, userId: string) {
-    return await Study.create(data);
+
+  async create(data: StudyRespositoryType) {
+     const study = await Study.create(data);
+     return study.toObject();
   }
 
+  // READ
   async findById(id: string) {
-    return await Study.findById(id).lean();
+      return await Study.findById(id).lean();    
   }
 
-  async findByUser(userId: string) {
-    return await Study.find({
+  async findAllOfToday(userId: string) {
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+      return await Study.find({
       userId: new Types.ObjectId(userId),
-    })
-      .sort({ updatedAt: -1 })
-      .lean();
-  }
+      studiedAt: {
+      $gte: startOfDay,
+      $lte: endOfDay,
+      },
+    }).lean();
+}
 
-  async findByNormalizedTitle(
-    userId: string,
-    subject: Subject,
-    normalizedTitle: string
-  ) {
-    return await Study.findOne({
-      userId: new Types.ObjectId(userId),
-      subject,
-      normalizedTitle,
-    });
-  }
+async findByNormalizedTitle(
+  userId: string,
+  subject: Subject,
+  normalizedTitle: string
+) {
+  return await Study.findOne({
+    userId: new Types.ObjectId(userId),
+    subject,
+    normalizedTitle,
+  }).lean();
+}
 
-  async update(id: string, data: Record<string, unknown>) {
-    return await Study.findByIdAndUpdate(id, data, {
-      new: true,
-      runValidators: true,
-    });
-  }
+  // async findByUser(userId: string) {
+    
+  // }
 
+  // async findBySomething(value: string) {}
+
+  // UPDATE
+  // async update(
+  //   id: string,
+  //   data: Record<string, unknown>
+  // ) {}
+
+  // DELETE
   async delete(id: string) {
-    return await Study.findByIdAndDelete(id);
+    return await Study.deleteOne({
+      _id : id
+    })
   }
 }
 

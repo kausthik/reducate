@@ -58,27 +58,14 @@ const studySchema = new Schema(
       enum: Object.values(Difficulty),
       required: true,
     },
-
+    studiedAt: {
+      type: Date,
+      default: Date.now,
+    },
     sources: {
       type: [sourceSchema],
       default: [],
-    },
-
-    studyCount: {
-      type: Number,
-      default: 1,
-      min: 1,
-    },
-
-    firstStudiedAt: {
-      type: Date,
-      default: Date.now,
-    },
-
-    lastStudiedAt: {
-      type: Date,
-      default: Date.now,
-    },
+    }
   },
   {
     timestamps: true,

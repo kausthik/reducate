@@ -1,3 +1,5 @@
+import { CreateStudyInput } from "../zod/study.schema";
+
 export enum Subject {
   DSA = "DSA",
   OPERATING_SYSTEM = "OPERATING_SYSTEM",
@@ -41,3 +43,8 @@ export interface StudyTopic {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type StudyRespositoryType = {
+   userId : string
+   normalizedTitle: string
+}  & CreateStudyInput 

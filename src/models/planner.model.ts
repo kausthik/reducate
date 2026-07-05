@@ -1,4 +1,11 @@
-import { Schema, model, models } from "mongoose";
+import {
+  InferSchemaType,
+  model,
+  models,
+  Schema,
+} from "mongoose";
+
+import { PlannerStatus, PlannerTaskStatus } from "@/src/types/planner";
 
 const plannerSchema = new Schema(
   {
@@ -15,6 +22,13 @@ const plannerSchema = new Schema(
       trim: true,
     },
 
+    normalizedTitle: {
+      type: String,
+      required: true,
+      trim: true,
+      set: (value: string) => value.trim().toLowerCase(),
+    },
+
     imageUrl: {
       type: String,
       trim: true,
@@ -23,19 +37,11 @@ const plannerSchema = new Schema(
     startDate: {
       type: Date,
       required: true,
-      default: Date.now,
     },
 
     dueDate: {
       type: Date,
       required: true,
-    },
-
-    progress: {
-      type: Number,
-      default: 0,
-      min: 0,
-      max: 100,
     },
 
     completedTasks: {
@@ -46,14 +52,27 @@ const plannerSchema = new Schema(
 
     totalTasks: {
       type: Number,
-      default: 0,
-      min: 0,
+      required: true,
+      min: 1,
     },
   },
   {
     timestamps: true,
   }
 );
+
+// Prevent duplicate planner names for the same user.
+plannerSchema.index(
+  {
+    userId: 1,
+    normalizedTitle: 1,
+  },
+  {
+    unique: true,
+  }
+);
+
+export type PlannerDocument = InferSchemaType<typeof plannerSchema>;
 
 export const Planner =
   models.Planner ||

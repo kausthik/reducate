@@ -17,8 +17,39 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
+import { createStudyAction } from "@/src/actions/study.action"
+import { Difficulty, SourceType, Subject } from "@/src/types/study"
 
 export function RegisterStudiedTopic() {
+
+  const handleSubmit = async (
+  e: React.FormEvent<HTMLFormElement>
+) => {
+  e.preventDefault();
+
+  const form = e.currentTarget;
+
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData);
+
+  await createStudyAction({
+    subject: data.subject as Subject,
+    title: data.title as string,
+    difficulty: data.difficulty as Difficulty,
+    sources: data.sourceName
+      ? [
+          {
+            type: data.sourceType as SourceType,
+            name: data.sourceName as string,
+            url: (data.sourceUrl as string) || undefined,
+          },
+        ]
+      : [],
+  });
+
+  form.reset();
+};
+
   return (
     <Dialog>
   <DialogTrigger asChild>
@@ -29,13 +60,7 @@ export function RegisterStudiedTopic() {
 
   <DialogContent className="sm:max-w-2xl">
     <form
-      onSubmit={(e) => {
-        e.preventDefault();
-
-        const formData = new FormData(e.currentTarget);
-
-        console.log(Object.fromEntries(formData));
-      }}
+      onSubmit={handleSubmit}
     >
       <DialogHeader>
         <DialogTitle>Add Study Topic</DialogTitle>
