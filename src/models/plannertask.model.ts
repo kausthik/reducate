@@ -22,6 +22,10 @@ const plannerTaskSchema = new Schema(
       required: true,
       index: true,
     },
+    studyId: {
+    type: Schema.Types.ObjectId,
+    ref: "Study",
+    },
 
     subject: {
       type: String,

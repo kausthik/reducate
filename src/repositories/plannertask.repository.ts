@@ -12,18 +12,38 @@ class PlannerTaskRepository {
 
   // READ
   async findById(id: string) {
-    return await PlannerTask.findById(id).lean();
-  }
+  const task = await PlannerTask.findById(id).lean();
+
+  if (!task) return null;
+
+  return {
+    ...task,
+    _id: task._id.toString(),
+    plannerId: task.plannerId.toString(),
+    studyId: task.studyId
+      ? task.studyId.toString()
+      : null,
+  };
+}
 
   async findByPlannerId(plannerId: string) {
-    return await PlannerTask.find({
-      plannerId: new Types.ObjectId(plannerId),
+  const tasks = await PlannerTask.find({
+    plannerId: new Types.ObjectId(plannerId),
+  })
+    .sort({
+      order: 1,
     })
-      .sort({
-        order: 1,
-      })
-      .lean();
-  }
+    .lean();
+
+  return tasks.map((task) => ({
+    ...task,
+    _id: task._id.toString(),
+    plannerId: task.plannerId.toString(),
+    studyId: task.studyId
+      ? task.studyId.toString()
+      : null,
+  }));
+}
 
   async findByNormalizedTitle(
     plannerId: string,
@@ -45,6 +65,23 @@ class PlannerTaskRepository {
       runValidators: true,
     });
   }
+
+  async completeTask(
+  taskId: string,
+  studyId: string
+) {
+  return PlannerTask.findByIdAndUpdate(
+    taskId,
+    {
+      status: "COMPLETED",
+      studyId: new Types.ObjectId(studyId),
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  ).lean();
+}
 
   // DELETE
   async delete(id: string) {

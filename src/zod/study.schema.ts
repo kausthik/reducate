@@ -29,7 +29,7 @@ export const createStudySchema = z.object({
     .string()
     .trim()
     .min(1, "Topic name is required")
-    .max(100, "Topic name is too long"),
+    .max(150, "Topic name is too long"),
 
   difficulty: z.enum(Difficulty),
 

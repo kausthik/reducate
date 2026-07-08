@@ -1,10 +1,11 @@
+import { Difficulty, Subject } from "@/src/types/study";
 import PlannerTaskItem from "./planner-task-item";
 
 export interface PlannerTask {
   id: string;
   title: string;
-  subject: string;
-  difficulty: string;
+  subject: Subject
+  difficulty: Difficulty;
   completed: boolean;
 }
 

@@ -32,6 +32,59 @@ class RevisionRepository {
     }).lean();
   }
 
+  async findTodayRevisions(userId: string) {
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const endOfDay = new Date();
+  endOfDay.setHours(23, 59, 59, 999);
+
+  const revisions = await Revision.find({
+    userId: new Types.ObjectId(userId),
+    scheduledFor: {
+      $gte: startOfDay,
+      $lte: endOfDay,
+    },
+    status: "PENDING",
+  })
+    .populate("studyId")
+    .sort({ scheduledFor: 1 })
+    .lean();
+
+  return revisions.map((revision) => ({
+    ...revision,
+    _id: revision._id.toString(),
+    userId: revision.userId.toString(),
+    studyId: revision.studyId
+      ? {
+          ...revision.studyId,
+          _id: revision.studyId._id.toString(),
+        }
+      : null,
+  }));
+}
+
+
+async deleteByStudyId(studyId: string) {
+  return Revision.deleteMany({
+    studyId: new Types.ObjectId(studyId),
+  });
+}
+
+async complete(id: string) {
+  return Revision.findByIdAndUpdate(
+    id,
+    {
+      status: "COMPLETED",
+      completedAt: new Date(),
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+}
+
   async findByStudyId(studyId: string) {
     return await Revision.find({
       studyId: new Types.ObjectId(studyId),

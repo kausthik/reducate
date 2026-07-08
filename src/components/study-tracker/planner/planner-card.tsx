@@ -14,6 +14,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 
 interface PlannerCardProps {
+  id: string;
   title: string;
   image: string;
   progress: number;
@@ -24,6 +25,7 @@ interface PlannerCardProps {
 }
 
 export default function PlannerCard({
+  id,
   title,
   image,
   progress,
@@ -33,7 +35,7 @@ export default function PlannerCard({
   status,
 }: PlannerCardProps) {
   return (
-    <Card className="overflow-hidden transition-all hover:shadow-lg">
+    <Card className="overflow-hidden transition-all hover:shadow-lg m-3 p-5">
       <div className="relative h-44">
         <Image
           src={image}
@@ -71,8 +73,8 @@ export default function PlannerCard({
 
       <CardFooter>
         <Button asChild className="w-full">
-         <Link href="/study-tracker/planner/1">
-            View Planner
+         <Link href={`/study-tracker/planner/${id}`}>
+              view planner
         </Link>
         </Button>
       </CardFooter>

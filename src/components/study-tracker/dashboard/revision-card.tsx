@@ -5,30 +5,21 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-
-
-import RevisionItem from "./revision-item";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-const revisions = [
-  {
-    title: "Binary Search",
-    subject: "DSA",
-    source: "Abdul Bari",
-  },
-  {
-    title: "Deadlock",
-    subject: "Operating System",
-    source: "Gate Smashers",
-  },
-  {
-    title: "Normalization",
-    subject: "DBMS",
-    source: "College Notes",
-  },
-];
+import RevisionItem from "./revision-item";
+import { getTodayRevisions } from "@/src/lib/server/revision";
+import NoRevisionsLeft from "@/components/ui/no-revision-left";
 
-export default function RevisionCard() {
+type RevisionCardProps = {
+  revisions: Awaited<
+    ReturnType<typeof getTodayRevisions>
+  >;
+};
+
+export default function RevisionCard({
+  revisions,
+}: RevisionCardProps) {
   return (
     <Card className="ml-5 mr-2.5">
       <CardHeader>
@@ -39,15 +30,23 @@ export default function RevisionCard() {
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="space-y-3">
-        <ScrollArea className="h-[420px]">
-        {revisions.map((revision) => (
-          <RevisionItem
-            key={revision.title}
-            {...revision}
-          />
-        ))}
-      </ScrollArea>
+      <CardContent>
+        {(revisions.length!==0)? 
+        <ScrollArea className="h-[420px] space-y-3">
+          {revisions.map((revision) => (
+            <RevisionItem
+              key={revision._id}
+              id={revision._id}
+              title={revision.studyId.title}
+              subject={revision.studyId.subject}
+              source={
+                revision.studyId.sources?.[0]?.name ??
+                "No Source"
+              }
+            />
+          ))}
+        </ScrollArea> : <NoRevisionsLeft/>
+       } 
       </CardContent>
     </Card>
   );

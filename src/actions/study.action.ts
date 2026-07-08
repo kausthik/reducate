@@ -23,8 +23,6 @@ export async function createStudyAction(
   }
 
   // 2. Validation
-  console.log("here is the data")
-  console.log(data)
   const validatedData = createStudySchema.parse(data);
 
   // 3. Service
@@ -41,6 +39,7 @@ export async function createStudyAction(
 }
 
 export async function getTodayStudiesAction() {
+  await connectDB();
   const session = await auth();
 
   if (!session?.user?.id) {

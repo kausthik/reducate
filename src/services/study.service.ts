@@ -27,7 +27,6 @@ class StudyService {
     normalizedTitle,
     ...data,
   });
-  console.log(data)
 
   await revisionService.createRevision({
     userId,
@@ -51,8 +50,10 @@ class StudyService {
   }
 
   async deleteStudy(id: string) {
-    return studyRepository.delete(id);
-  }
+  await revisionService.deleteByStudyId(id);
+
+  return studyRepository.delete(id);
+}
 }
 
 export default new StudyService();

@@ -1,7 +1,12 @@
+"use client"
+
 import { Badge } from "@/components/ui/badge";
 import { BookOpen } from "lucide-react";
-
+import { Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { deleteStudyAction } from "@/src/actions/study.action";
 interface StudiedTopicItemProps {
+  id: string;
   subject: string;
   title: string;
   difficulty: "Easy" | "Medium" | "Hard";
@@ -14,6 +19,7 @@ const difficultyColor = {
 };
 
 export default function StudiedTopicItem({
+  id,
   subject,
   title,
   difficulty,
@@ -34,12 +40,24 @@ export default function StudiedTopicItem({
         </div>
       </div>
 
-      <Badge
-        variant="secondary"
-        className={difficultyColor[difficulty]}
-      >
-        {difficulty}
-      </Badge>
+     <div className="flex items-center gap-2">
+  <Badge
+    variant="secondary"
+    className={difficultyColor[difficulty]}
+  >
+    {difficulty}
+  </Badge>
+
+  <Button
+    variant="ghost"
+    size="icon"
+    onClick={async () => {
+      await deleteStudyAction(id);
+    }}
+  >
+    <Trash2 className="h-4 w-4 text-red-500" />
+  </Button>
+</div>
     </div>
   );
 }

@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
+
+import { createPlannerAction } from "@/src/actions/planner.action";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,52 +30,65 @@ const EXAMPLE_JSON = `[
 ]`;
 
 export default function PlannerForm() {
+
   const [plannerName, setPlannerName] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [startDate, setStartDate] = useState("");
   const [dueDate, setDueDate] = useState("");
-
   const [json, setJson] = useState("");
 
   function loadExample() {
     setJson(EXAMPLE_JSON);
   }
 
-  function validateJson() {
-    try {
-      const parsed = JSON.parse(json);
+   function validateJson() {
+  try {
+    const parsed = JSON.parse(json);
 
-      if (!Array.isArray(parsed)) {
-        alert("JSON must be an array.");
-        return;
-      }
-
-      alert("✅ Valid JSON");
-      console.log(parsed);
-    } catch {
-      alert("❌ Invalid JSON");
+    if (!Array.isArray(parsed)) {
+      toast.error("JSON must be an array.");
+      return;
     }
+
+    toast.success("Valid JSON");
+  } catch {
+    toast.error("Invalid JSON");
   }
+}
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function handleSubmit(
+  e: React.FormEvent<HTMLFormElement>
+) {
+  e.preventDefault();
 
-    try {
-      const tasks = JSON.parse(json);
+  try {
+    const tasks = JSON.parse(json);
 
-      console.log({
-        plannerName,
-        imageUrl,
-        startDate,
-        dueDate,
-        tasks,
-      });
-
-      alert("Planner logged to console.");
-    } catch {
-      alert("Please enter valid planner JSON.");
+    if (!Array.isArray(tasks)) {
+      toast.error("Planner JSON must be an array.");
+      return;
     }
+
+    await createPlannerAction({
+      title: plannerName,
+      imageUrl: imageUrl || undefined,
+      startDate: new Date(startDate),
+      dueDate: new Date(dueDate),
+      plannerTasks: tasks,
+    });
+
+    toast.success("Planner created successfully.");
+
+    setPlannerName("");
+    setImageUrl("");
+    setStartDate("");
+    setDueDate("");
+    setJson("");
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to create planner.");
   }
+}
 
   return (
     <form
@@ -80,15 +96,12 @@ export default function PlannerForm() {
       className="space-y-8"
     >
       <div className="space-y-6">
-
         <div className="grid gap-2">
           <Label>Planner Name</Label>
 
           <Input
             value={plannerName}
-            onChange={(e) =>
-              setPlannerName(e.target.value)
-            }
+            onChange={(e) => setPlannerName(e.target.value)}
             placeholder="Striver A2Z DSA Sheet"
           />
         </div>
@@ -98,9 +111,7 @@ export default function PlannerForm() {
 
           <Input
             value={imageUrl}
-            onChange={(e) =>
-              setImageUrl(e.target.value)
-            }
+            onChange={(e) => setImageUrl(e.target.value)}
             placeholder="https://..."
           />
         </div>
@@ -112,9 +123,7 @@ export default function PlannerForm() {
             <Input
               type="date"
               value={startDate}
-              onChange={(e) =>
-                setStartDate(e.target.value)
-              }
+              onChange={(e) => setStartDate(e.target.value)}
             />
           </div>
 
@@ -124,19 +133,15 @@ export default function PlannerForm() {
             <Input
               type="date"
               value={dueDate}
-              onChange={(e) =>
-                setDueDate(e.target.value)
-              }
+              onChange={(e) => setDueDate(e.target.value)}
             />
           </div>
         </div>
-
       </div>
 
       <Separator />
 
       <div className="space-y-4">
-
         <div>
           <h3 className="font-semibold">
             Planner Roadmap (JSON)
@@ -149,9 +154,7 @@ export default function PlannerForm() {
 
         <Textarea
           value={json}
-          onChange={(e) =>
-            setJson(e.target.value)
-          }
+          onChange={(e) => setJson(e.target.value)}
           className="min-h-[320px] font-mono"
           placeholder={`[
   {
@@ -179,7 +182,6 @@ export default function PlannerForm() {
             Validate JSON
           </Button>
         </div>
-
       </div>
 
       <Separator />
@@ -188,6 +190,13 @@ export default function PlannerForm() {
         <Button
           type="button"
           variant="outline"
+          onClick={() => {
+            setPlannerName("");
+            setImageUrl("");
+            setStartDate("");
+            setDueDate("");
+            setJson("");
+          }}
         >
           Cancel
         </Button>

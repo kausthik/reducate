@@ -2,17 +2,23 @@ import DashboardHeader from "@/src/components/study-tracker/dashboard/dashboard-
 import RevisionCard from "@/src/components/study-tracker/dashboard/revision-card";
 import StatsSection from "@/src/components/study-tracker/dashboard/stat-section";
 import StudiedTopicsCard from "@/src/components/study-tracker/dashboard/studies-topics-card";
+import { getTodayRevisions } from "@/src/lib/server/revision";
 
-export default function page(){
-    return(
-         <div>
-        <DashboardHeader />
-        <StatsSection />
+import { getTodayStudies } from "@/src/lib/server/study";
 
-        <div className="grid gap-6 lg:grid-cols-2">
-        <StudiedTopicsCard />
-        <RevisionCard />
-        </div>
-       </div>
-    )
+export default async function Page() {
+  const studies = await getTodayStudies();
+  const revisions = await getTodayRevisions();
+
+  return (
+    <div>
+      <DashboardHeader />
+      <StatsSection />
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <StudiedTopicsCard studies={studies} />
+       <RevisionCard revisions={revisions} />
+      </div>
+    </div>
+  );
 }

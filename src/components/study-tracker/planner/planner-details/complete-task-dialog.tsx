@@ -1,91 +1,140 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
-import { Badge } from "@/components/ui/badge";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
-import { Difficulty, Subject } from "@/src/types/study";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
-import CompleteTaskDialog from "./complete-task-dialog";
+import { completePlannerTaskAction } from "@/src/actions/planner.action";
+import { SourceType } from "@/src/types/study";
 
-interface PlannerTaskItemProps {
-  id: string;
-  title: string;
-  subject: Subject;
-  difficulty: Difficulty;
-  completed: boolean;
+interface CompleteTaskDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  plannerTaskId: string;
+  taskTitle: string;
 }
 
-export default function PlannerTaskItem({
-  id,
-  title,
-  subject,
-  difficulty,
-  completed,
-}: PlannerTaskItemProps) {
-  const [open, setOpen] = useState(false);
+export default function CompleteTaskDialog({
+  open,
+  onOpenChange,
+  plannerTaskId,
+  taskTitle,
+}: CompleteTaskDialogProps) {
+  const router = useRouter();
 
-  function handleCheckedChange(checked: boolean) {
-    if (!completed && checked) {
-      setOpen(true);
-    }
+  const [isPending, startTransition] =
+    useTransition();
+
+  const [sourceName, setSourceName] =
+    useState("");
+
+  const [sourceUrl, setSourceUrl] =
+    useState("");
+
+  function handleComplete() {
+    startTransition(async () => {
+      try {
+        await completePlannerTaskAction(
+          plannerTaskId,
+          [
+            {
+              type: SourceType.YOUTUBE,
+              name: sourceName,
+              url: sourceUrl || undefined,
+            },
+          ]
+        );
+
+        toast.success(
+          "Task completed successfully."
+        );
+
+        onOpenChange(false);
+
+        setSourceName("");
+        setSourceUrl("");
+
+        router.refresh();
+      } catch (error) {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "Something went wrong."
+        );
+      }
+    });
   }
 
   return (
-    <>
-      <Card className="transition-colors hover:bg-muted/40">
-        <CardContent className="flex items-center justify-between py-4">
-          <div className="flex items-center gap-4">
-            <Checkbox
-              checked={completed}
-              onCheckedChange={handleCheckedChange}
-            />
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+    >
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>
+            Complete Task
+          </DialogTitle>
 
-            <div>
-              <h3
-                className={`font-medium ${
-                  completed
-                    ? "text-muted-foreground line-through"
-                    : ""
-                }`}
-              >
-                {title}
-              </h3>
+          <DialogDescription>
+            Add the learning source used for{" "}
+            <strong>{taskTitle}</strong>.
+          </DialogDescription>
+        </DialogHeader>
 
-              <div className="mt-2 flex gap-2">
-                <Badge variant="secondary">
-                  {subject}
-                </Badge>
+        <div className="space-y-4 py-2">
+          <Input
+            placeholder="Source Name (e.g. Striver A2Z)"
+            value={sourceName}
+            onChange={(e) =>
+              setSourceName(e.target.value)
+            }
+          />
 
-                <Badge variant="outline">
-                  {difficulty}
-                </Badge>
-              </div>
-            </div>
-          </div>
+          <Input
+            placeholder="Source URL (optional)"
+            value={sourceUrl}
+            onChange={(e) =>
+              setSourceUrl(e.target.value)
+            }
+          />
+        </div>
 
-          {!completed && (
-            <Badge>
-              Pending
-            </Badge>
-          )}
+        <DialogFooter>
+          <Button
+            variant="outline"
+            onClick={() =>
+              onOpenChange(false)
+            }
+          >
+            Cancel
+          </Button>
 
-          {completed && (
-            <Badge variant="secondary">
-              Completed
-            </Badge>
-          )}
-        </CardContent>
-      </Card>
-
-      <CompleteTaskDialog
-        open={open}
-        onOpenChange={setOpen}
-        plannerTaskId={id}
-        taskTitle={title}
-      />
-    </>
+          <Button
+            disabled={
+              isPending ||
+              sourceName.trim() === ""
+            }
+            onClick={handleComplete}
+          >
+            {isPending
+              ? "Completing..."
+              : "Complete Task"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

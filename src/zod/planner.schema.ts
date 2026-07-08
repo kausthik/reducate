@@ -12,7 +12,7 @@ export const createPlannerTaskSchema = z.object({
     .string()
     .trim()
     .min(1, "Task title is required")
-    .max(100, "Task title is too long"),
+    .max(150, "Task title is too long"),
 
   difficulty: z.enum(Difficulty),
 });
@@ -23,18 +23,23 @@ export const createPlannerSchema = z
       .string()
       .trim()
       .min(1, "Planner title is required")
-      .max(100, "Planner title is too long"),
+      .max(150, "Planner title is too long"),
 
     imageUrl: z
-      .string()
-      .trim()
-      .optional()
-      .refine(
-        (value) => !value || URL.canParse(value),
-        {
-          message: "Invalid image URL",
-        }
-      ),
+  .string()
+  .trim()
+  .optional()
+  .refine(
+    (value) => {
+      if (!value) return true;
+      if (value.startsWith("/")) return true;
+      return URL.canParse(value);
+    },
+    {
+      message:
+        "Image URL must be a valid URL or start with '/'.",
+    }
+  ),
 
     startDate: z.coerce.date(),
 

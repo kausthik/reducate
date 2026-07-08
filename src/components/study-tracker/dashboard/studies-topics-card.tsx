@@ -9,50 +9,16 @@ import {
 
 import StudiedTopicItem from "./studied-topic-item";
 import { RegisterStudiedTopic } from "./study/add-topic-dialog";
-import { getTodayStudiesAction } from "@/src/actions/study.action";
+import { getTodayStudies } from "@/src/lib/server/study";
 
-type topicType = {
-    subject: string, 
-    title: string,
-    difficulty: "Easy" | "Medium" | "Hard";
-}
-
-const topics : topicType[] = [
-  {
-    subject: "Operating System",
-    title: "Deadlock",
-    difficulty: "Hard",
-  },
-  {
-    subject: "DSA",
-    title: "Binary Search",
-    difficulty: "Easy",
-  },
-  {
-    subject: "DBMS",
-    title: "Normalization",
-    difficulty: "Medium",
-  },
-  {
-    subject: "Computer Networks",
-    title: "TCP Handshake",
-    difficulty: "Medium",
-  },
-];
-
-
-export  default function StudiedTopicsCard() {
-
-// const [data, setData] = useState([]);
-
-// useEffect(() => {
-//   async function fetchStudies() {
-//     const studies = await getTodayStudiesAction();
-//     setData(studies);
-//   }
-//   fetchStudies();
-// }, []);
-  
+type StudiedTopicsCardProps = {
+  studies: Awaited<
+    ReturnType<typeof getTodayStudies>
+  >;
+};
+export  default function StudiedTopicsCard({
+  studies,
+}: StudiedTopicsCardProps) {  
   return (
     <Card className="ml-5 mr-2.5">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -60,18 +26,20 @@ export  default function StudiedTopicsCard() {
           <CardTitle>Studied Topics</CardTitle>
 
           <CardDescription>
-            Topics you've completed manually.
+            Topics you've completed Today.
           </CardDescription>
         </div>
-        {/* add dialog box */}
        <RegisterStudiedTopic/>
       </CardHeader>
 
       <CardContent className="space-y-3">
-        {topics.map((topic) => (
-          <StudiedTopicItem
-            key={topic.title}
-            {...topic}
+        {studies.map((study) => (
+         <StudiedTopicItem
+          key={study._id}
+          id={study._id}
+          subject={study.subject}
+          title={study.title}
+          difficulty={study.difficulty}
           />
         ))}
       </CardContent>

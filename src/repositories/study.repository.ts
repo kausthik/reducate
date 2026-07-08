@@ -7,7 +7,12 @@ class StudyRepository {
 
   async create(data: StudyRespositoryType) {
      const study = await Study.create(data);
-     return study.toObject();
+     const obj = study.toObject();
+     return {
+      ...obj,
+      _id: obj._id.toString(),
+      userId: obj.userId.toString(),
+     }
   }
 
   // READ
@@ -22,13 +27,19 @@ class StudyRepository {
     const endOfDay = new Date();
     endOfDay.setHours(23, 59, 59, 999);
 
-      return await Study.find({
+      const studies =  await Study.find({
       userId: new Types.ObjectId(userId),
       studiedAt: {
       $gte: startOfDay,
       $lte: endOfDay,
       },
     }).lean();
+
+    return studies.map((study) => ({
+    ...study,
+    _id: study._id.toString(),
+    userId: study.userId.toString(),
+  }));
 }
 
 async findByNormalizedTitle(

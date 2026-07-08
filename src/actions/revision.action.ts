@@ -1,36 +1,16 @@
 "use server";
 
-import { auth } from "../lib/auth";
 import { revalidatePath } from "next/cache";
 
+import { auth } from "../lib/auth";
+import { connectDB } from "../lib/mongodb";
+
 import revisionService from "../services/revision.service";
-import {
-  createRevisionSchema,
-  CreateRevisionInput,
-} from "@/src/zod/revision.schema";
 
-export async function createRevisionAction(
-  data: CreateRevisionInput
-) {
-  const session = await auth();
-
-  if (!session?.user?.id) {
-    throw new Error("Unauthorized");
-  }
-
-  const validatedData = createRevisionSchema.parse(data);
-
-  const revision = await revisionService.createRevision(
-    validatedData,
-    session.user.id
-  );
-
-  revalidatePath("/study-tracker/revision");
-
-  return revision;
-}
 
 export async function getTodayRevisionsAction() {
+  await connectDB();
+
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -45,6 +25,8 @@ export async function getTodayRevisionsAction() {
 export async function getRevisionByIdAction(
   id: string
 ) {
+  await connectDB();
+
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -57,15 +39,37 @@ export async function getRevisionByIdAction(
 export async function deleteRevisionAction(
   id: string
 ) {
+  await connectDB();
+
   const session = await auth();
 
   if (!session?.user?.id) {
     throw new Error("Unauthorized");
   }
 
-  const revision = await revisionService.deleteRevision(id);
+  const revision =
+    await revisionService.deleteRevision(id);
 
-  revalidatePath("/study-tracker/revision");
+  revalidatePath("/study-tracker");
+
+  return revision;
+}
+
+export async function completeRevisionAction(
+  id: string
+) {
+  await connectDB();
+
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    throw new Error("Unauthorized");
+  }
+
+  const revision =
+    await revisionService.completeRevision(id);
+
+  revalidatePath("/study-tracker");
 
   return revision;
 }
