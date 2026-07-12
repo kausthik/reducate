@@ -10,6 +10,7 @@ import {
 import StudiedTopicItem from "./studied-topic-item";
 import { RegisterStudiedTopic } from "./study/add-topic-dialog";
 import { getTodayStudies } from "@/src/lib/server/study";
+import NoStudyToday from "@/components/ui/no-study-today";
 
 type StudiedTopicsCardProps = {
   studies: Awaited<
@@ -33,7 +34,8 @@ export  default function StudiedTopicsCard({
       </CardHeader>
 
       <CardContent className="space-y-3">
-        {studies.map((study) => (
+        {(studies.length===0)? <NoStudyToday/> : 
+        studies.map((study) => (
          <StudiedTopicItem
           key={study._id}
           id={study._id}
@@ -41,7 +43,8 @@ export  default function StudiedTopicsCard({
           title={study.title}
           difficulty={study.difficulty}
           />
-        ))}
+        ))
+      }
       </CardContent>
     </Card>
   );
