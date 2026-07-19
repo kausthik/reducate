@@ -6,3 +6,8 @@ export interface RevisionRepositoryType {
   status?: "PENDING" | "COMPLETED" | "OVERDUE";
   completedAt?: Date;
 }
+
+export enum WantRevisionType {
+  YES = "YES",
+  NO = "NO"
+}

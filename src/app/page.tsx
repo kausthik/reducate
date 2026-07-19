@@ -1,8 +1,10 @@
 import ServicesPage from "../components/servicesPage/servicesPage";
 import { servicesData } from "../config/services-data";
+import { connectDB } from "../lib/mongodb";
 import { blackOps } from "./layout";
 
 export default function Home() {
+  connectDB()
   return (
     <div>
      <h1 className={`scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance p-5 m-2 text-blue-900 ${blackOps.className}`}>

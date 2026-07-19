@@ -34,6 +34,11 @@ export default function PlannerCard({
   dueDate,
   status,
 }: PlannerCardProps) {
+   const targetDate = new Date("7/31/2026");
+   const currentDate = new Date();
+   const diffInMs = targetDate.getTime() - currentDate.getTime();
+   const daysRemaining = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+   const learningFactor = ((total - completed)/daysRemaining).toFixed(2);
   return (
     <Card className="overflow-hidden transition-all hover:shadow-lg m-3 p-5">
       <div className="relative h-44">
@@ -63,9 +68,9 @@ export default function PlannerCard({
             {completed} / {total} Tasks
           </span>
 
-          <span>{progress}%</span>
+          <span>{progress}% | {learningFactor}</span>
         </div>
-
+       
         <div className="text-sm text-muted-foreground">
           Due: {dueDate}
         </div>

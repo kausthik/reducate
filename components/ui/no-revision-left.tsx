@@ -87,7 +87,7 @@ export default function NoRevisionsLeft() {
               "ui-sans-serif, system-ui, -apple-system, sans-serif",
           }}
         >
-          Good Work, you have completed your today's revisions.
+          Great Buddy, you have completed your all revisions.
         </p>
       </div>
     </div>

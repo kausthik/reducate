@@ -42,7 +42,7 @@ class RevisionRepository {
   const revisions = await Revision.find({
     userId: new Types.ObjectId(userId),
     scheduledFor: {
-      $gte: startOfDay,
+      // $gte: startOfDay,
       $lte: endOfDay,
     },
     status: "PENDING",

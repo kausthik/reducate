@@ -87,16 +87,13 @@ export function RegisterStudiedTopic() {
               </SelectTrigger>
 
               <SelectContent>
-                <SelectItem value="DSA">DSA</SelectItem>
-                <SelectItem value="OPERATING_SYSTEM">
-                  Operating System
+                {
+                Object.values(Subject).map((subject) => (
+              <SelectItem key={subject} value={subject}>
+              {subject}
                 </SelectItem>
-                <SelectItem value="DBMS">
-                  DBMS
-                </SelectItem>
-                <SelectItem value="COMPUTER_NETWORKS">
-                  Computer Networks
-                </SelectItem>
+                ))
+              }
               </SelectContent>
             </Select>
           </Field>

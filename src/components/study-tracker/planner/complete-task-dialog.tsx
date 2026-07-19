@@ -20,6 +20,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+import { WantRevisionType } from "@/src/types/revision";
+
 import {
   Select,
   SelectContent,
@@ -42,6 +44,8 @@ export default function CompleteTaskDialog({
   const [type, setType] =
     useState<SourceType>(SourceType.YOUTUBE);
 
+  const [wantRevision, setWantRevision] = useState<WantRevisionType>(WantRevisionType.YES);
+
   const [name, setName] = useState("");
 
   const [url, setUrl] = useState("");
@@ -58,7 +62,7 @@ export default function CompleteTaskDialog({
             name,
             url: url || undefined,
           },
-        ]);
+        ], wantRevision);
 
         toast.success("Task completed.");
 
@@ -67,6 +71,7 @@ export default function CompleteTaskDialog({
         setName("");
         setUrl("");
         setType(SourceType.YOUTUBE);
+        setWantRevision(WantRevisionType.YES)
       } catch (error) {
         if (error instanceof Error) {
           toast.error(error.message);
@@ -101,9 +106,9 @@ export default function CompleteTaskDialog({
         </DialogHeader>
 
         <div className="space-y-4">
-          <div>
+          <div className="flex justify-between">
+            <div>
             <Label>Source Type</Label>
-
             <Select
               value={type}
               onValueChange={(value) =>
@@ -141,7 +146,31 @@ export default function CompleteTaskDialog({
               </SelectContent>
             </Select>
           </div>
+          <div>
+              <Label>Put in Revision??</Label>
+            <Select
+              value={wantRevision}
+              onValueChange={(value) =>
+                setWantRevision(value as WantRevisionType)
+              }
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
 
+              <SelectContent>
+                <SelectItem value="YES">
+                  YES
+                </SelectItem>
+
+                <SelectItem value="NO">
+                  NO
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          </div>
           <div>
             <Label>Source Name</Label>
 

@@ -6,6 +6,8 @@ import CreatePlannerDialog from "@/src/components/study-tracker/planner/create-p
 export default async function PlannerPage() {
   const planners =
     await getUserPlannersAction();
+    console.log("here is your planners")
+    console.log(planners)
 
   return (
     <div className="space-y-6 m-3">

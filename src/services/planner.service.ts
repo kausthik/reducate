@@ -4,6 +4,7 @@ import plannertaskRepository from "../repositories/plannertask.repository";
 
 import studyService from "./study.service";
 import { SourceType } from "@/src/types/study";
+import { WantRevisionType } from "../types/revision";
 
 class PlannerService {
   async createPlanner(
@@ -43,7 +44,8 @@ class PlannerService {
     type: SourceType;
     name: string;
     url?: string;
-  }[]
+  }[],
+  wantRevision : WantRevisionType,
 ) {
   const task = await plannertaskRepository.findById(taskId);
 
@@ -60,7 +62,8 @@ class PlannerService {
       difficulty: task.difficulty,
       sources,
     },
-    userId
+    userId,
+    wantRevision
   );
   await plannertaskRepository.completeTask(
     taskId,

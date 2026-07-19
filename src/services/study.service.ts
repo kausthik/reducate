@@ -2,12 +2,14 @@ import studyRepository from "@/src/repositories/study.repository";
 import { CreateStudyInput } from "@/src/zod/study.schema";
 import { getNextRevisionDate } from "../lib/revision.utils";
 import revisionService from "./revision.service";
+import { WantRevisionType } from "../types/revision";
 
 class StudyService {
 
   async createStudy(
   data: CreateStudyInput,
-  userId: string
+  userId: string, 
+  wantRevision : WantRevisionType
 ) {
   const normalizedTitle = data.title.trim().toLowerCase();
 
@@ -27,7 +29,10 @@ class StudyService {
     normalizedTitle,
     ...data,
   });
-
+  console.log("i am in study service ", wantRevision)
+  
+  if(wantRevision===WantRevisionType.YES){
+    console.log("REVISION CREATED")
   await revisionService.createRevision({
     userId,
     studyId: study._id.toString(),
@@ -37,6 +42,7 @@ class StudyService {
       1
     ),
   });
+}
 
   return study;
 }

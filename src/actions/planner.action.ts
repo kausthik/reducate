@@ -13,6 +13,7 @@ import {
 } from "@/src/zod/planner.schema";
 
 import { SourceType } from "@/src/types/study";
+import {WantRevisionType } from "../types/revision";
 
 export async function createPlannerAction(
   data: CreatePlannerInput
@@ -92,10 +93,10 @@ export async function completePlannerTaskAction(
     type: SourceType;
     name: string;
     url?: string;
-  }[]
+  }[],
+  wantRevision: WantRevisionType,
 ) {
   await connectDB();
-
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -106,7 +107,8 @@ export async function completePlannerTaskAction(
     await plannerService.completeTask(
       taskId,
       session.user.id,
-      sources
+      sources,
+      wantRevision,
     );
 
   revalidatePath("/study-tracker");
