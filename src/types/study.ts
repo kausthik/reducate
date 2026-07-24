@@ -29,6 +29,7 @@ export enum SourceType {
   COURSE = "COURSE",
   LEETCODE = "LEETCODE",
   NOTES = "NOTES",
+  AIMODEL = "AI MODEL"
 }
 
 

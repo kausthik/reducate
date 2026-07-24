@@ -34,11 +34,12 @@ export default function PlannerCard({
   dueDate,
   status,
 }: PlannerCardProps) {
-   const targetDate = new Date("7/31/2026");
-   const currentDate = new Date();
-   const diffInMs = targetDate.getTime() - currentDate.getTime();
-   const daysRemaining = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
-   const learningFactor = ((total - completed)/daysRemaining).toFixed(2);
+  const [day, month, year] = dueDate.split("/").map(Number);
+  const targetDate = new Date(year, month - 1, day);
+  const currentDate = new Date();
+  const diffInMs = targetDate.getTime() - currentDate.getTime();
+  const daysRemaining = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+  const learningFactor = ((total - completed)/daysRemaining).toFixed(2);
   return (
     <Card className="overflow-hidden transition-all hover:shadow-lg m-3 p-5">
       <div className="relative h-44">

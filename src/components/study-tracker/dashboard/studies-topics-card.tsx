@@ -1,3 +1,5 @@
+"use client"
+
 import {
   Card,
   CardContent,
@@ -11,6 +13,9 @@ import StudiedTopicItem from "./studied-topic-item";
 import { RegisterStudiedTopic } from "./study/add-topic-dialog";
 import { getTodayStudies } from "@/src/lib/server/study";
 import NoStudyToday from "@/components/ui/no-study-today";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { plannerRoute } from "@/lib/routes";
 
 type StudiedTopicsCardProps = {
   studies: Awaited<
@@ -20,6 +25,7 @@ type StudiedTopicsCardProps = {
 export  default function StudiedTopicsCard({
   studies,
 }: StudiedTopicsCardProps) {  
+  const router = useRouter();
   return (
     <Card className="ml-5 mr-2.5">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -30,6 +36,9 @@ export  default function StudiedTopicsCard({
             Topics you've completed Today.
           </CardDescription>
         </div>
+        <Button onClick={()=>{
+          router.push(plannerRoute)
+        }}>Planners</Button>
        <RegisterStudiedTopic/>
       </CardHeader>
 

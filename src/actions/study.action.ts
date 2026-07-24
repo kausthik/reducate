@@ -9,6 +9,7 @@ import {
   CreateStudyInput,
 } from "@/src/zod/study.schema";
 import { connectDB } from "../lib/mongodb";
+import { WantRevisionType } from "../types/revision";
 
 
 export async function createStudyAction(
@@ -28,7 +29,8 @@ export async function createStudyAction(
   // 3. Service
   const study = await studyService.createStudy(
     validatedData,
-    session.user.id
+    session.user.id,
+    WantRevisionType.YES
   );
 
   // 4. Revalidate Cache

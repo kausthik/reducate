@@ -1,7 +1,7 @@
 import { getUserPlannersAction } from "@/src/actions/planner.action";
 
 import PlannerCard from "@/src/components/study-tracker/planner/planner-card";
-import CreatePlannerDialog from "@/src/components/study-tracker/planner/create-planner-dialog";
+import PlannerHeader from "@/src/components/study-tracker/planner/planner-header";
 
 export default async function PlannerPage() {
   const planners =
@@ -11,14 +11,7 @@ export default async function PlannerPage() {
 
   return (
     <div className="space-y-6 m-3">
-
-      <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold p-2 underline ml-2">
-          PLANNERS
-        </h1>
-        <CreatePlannerDialog />
-      </div>
-
+       <PlannerHeader/>
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {planners.map((planner) => {
           const progress =
