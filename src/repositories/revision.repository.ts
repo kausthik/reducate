@@ -103,6 +103,23 @@ async complete(id: string) {
   async delete(id: string) {
     return await Revision.findByIdAndDelete(id);
   }
+
+  async countTodays(id: string){
+    const date = new Date()
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    return await Revision.countDocuments({
+    userId: id,
+    completedAt: {
+    $gte: startOfDay,
+    $lte: endOfDay,
+   },
+  });
+  }
 }
 
 export default new RevisionRepository();

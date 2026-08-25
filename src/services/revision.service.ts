@@ -63,6 +63,10 @@ async completeRevision(id: string) {
   async deleteRevision(id: string) {
     return revisionRepository.delete(id);
   }
+
+  async countTodaysCompletedRevision(id: string){
+    return revisionRepository.countTodays(id);
+  }
 }
 
 export default new RevisionService();

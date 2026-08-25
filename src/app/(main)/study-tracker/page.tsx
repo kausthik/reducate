@@ -1,7 +1,7 @@
 import { getUpcomingImportantDatesAction } from "@/src/actions/important-date.action";
 import ImportantDatesCard from "@/src/components/important-dates/important-dates-card";
 import DashboardHeader from "@/src/components/study-tracker/dashboard/dashboard-header";
-import RevisionCard from "@/src/components/study-tracker/dashboard/revision-card";
+import RevisionCard from "@/src/components/study-tracker/dashboard/revision/revision-card";
 import StatsSection from "@/src/components/study-tracker/dashboard/stat-section";
 import StudiedTopicsCard from "@/src/components/study-tracker/dashboard/studies-topics-card";
 import { getTodayRevisions } from "@/src/lib/server/revision";
@@ -14,16 +14,16 @@ export default async function Page() {
   const dates = await getUpcomingImportantDatesAction();
 
   return (
-    <div className="space-y-6">
+  <div className="space-y-6 bg-gray-200">
   <DashboardHeader />
 
   <StatsSection />
 
-  <div className="grid gap-6 xl:grid-cols-3 p-3">
-      <StudiedTopicsCard studies={studies} />
+  <div className="grid gap-6 xl:grid-cols-2 p-3">
+     <StudiedTopicsCard studies={studies} />
      <RevisionCard revisions={revisions} />
      <ImportantDatesCard />
-</div>
-</div>
+ </div>
+ </div>
   );
 }

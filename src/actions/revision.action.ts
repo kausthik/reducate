@@ -73,3 +73,18 @@ export async function completeRevisionAction(
 
   return revision;
 }
+
+export async function todaysCompletedRevisionCount() {
+  await connectDB();
+
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    throw new Error("Unauthorized");
+  }
+
+  const revision =
+  await revisionService.countTodaysCompletedRevision(session.user.id);
+
+  return revision;
+}

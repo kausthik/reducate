@@ -45,7 +45,7 @@ export async function PATCH(req: NextRequest) {
     }
 
     await connectDB();
-    const user = await User.findByIdAndUpdate(userId, update, { new: true }).select("-password").lean();
+    const user = await User.findByIdAndUpdate(userId, update, { returnDocument: "after" }).select("-password").lean();
 
     return NextResponse.json({ user, message: "Profile updated" });
   } catch (err) {
