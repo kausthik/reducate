@@ -8,7 +8,7 @@ import Link from "next/link";
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/calorie-tracker";
+  const callbackUrl = searchParams.get("callbackUrl") || "/study-tracker";
   const justRegistered = searchParams.get("registered") === "true";
 
   const [form, setForm] = useState({ email: "", password: "" });

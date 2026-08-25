@@ -14,6 +14,7 @@ export enum Subject {
   DEVOPS = "DEVOPS",
   SOFTWARE_ENGINEERING = "SOFTWARE_ENGINEERING",
   WEB_SECURITY = "WEB_SECURITY",
+  CYBER_SECURITY = "CYBER_SECURITY",
 }
 
 export enum Difficulty {

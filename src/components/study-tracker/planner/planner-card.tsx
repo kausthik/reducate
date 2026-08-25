@@ -47,6 +47,7 @@ export default function PlannerCard({
           src={image}
           alt={title}
           fill
+          sizes = "20vw"
           className="object-cover"
         />
       </div>
