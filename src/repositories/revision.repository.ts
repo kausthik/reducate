@@ -13,8 +13,25 @@ class RevisionRepository {
 
   // READ
   async findById(id: string) {
-    return await Revision.findById(id).lean();
+  const revision = await Revision.findById(id).lean();
+
+  if (!revision) {
+    return null;
   }
+
+  return {
+    ...revision,
+    _id: revision._id.toString(),
+    userId: revision.userId.toString(),
+    studyId: revision.studyId.toString(),
+    scheduledFor: revision.scheduledFor.toISOString(),
+    completedAt: revision.completedAt
+      ? revision.completedAt.toISOString()
+      : null,
+    createdAt: revision.createdAt.toISOString(),
+    updatedAt: revision.updatedAt.toISOString(),
+  };
+}
 
   async findToday(userId: string) {
     const startOfDay = new Date();
@@ -42,7 +59,6 @@ class RevisionRepository {
   const revisions = await Revision.find({
     userId: new Types.ObjectId(userId),
     scheduledFor: {
-      // $gte: startOfDay,
       $lte: endOfDay,
     },
     status: "PENDING",
@@ -53,14 +69,20 @@ class RevisionRepository {
 
   return revisions.map((revision) => ({
     ...revision,
+
     _id: revision._id.toString(),
     userId: revision.userId.toString(),
+
     studyId: revision.studyId
       ? {
           ...revision.studyId,
           _id: revision.studyId._id.toString(),
         }
       : null,
+
+    scheduledFor: revision.scheduledFor.toISOString(),
+    createdAt: revision.createdAt.toISOString(),
+    updatedAt: revision.updatedAt.toISOString(),
   }));
 }
 
@@ -79,7 +101,7 @@ async complete(id: string) {
       completedAt: new Date(),
     },
     {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     }
   );

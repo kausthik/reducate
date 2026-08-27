@@ -16,6 +16,7 @@ export class StatsRepository {
     userId: string,
   ): Promise<DashboardStats> {
     const today = new Date();
+    today.setHours(23, 59, 59, 999);
 
     const [
       topicsStudied,
@@ -34,12 +35,12 @@ export class StatsRepository {
       Revision.countDocuments({
         userId,
         status: RevisionStatus.PENDING,
-        scheduledFor: { $lt: today },
+        scheduledFor: { $lt : today },
       }),
 
       Planner.countDocuments({
         userId,
-        dueDate: { $lt: today },
+        dueDate: { $lte : today },
         $expr: {
           $lt: ["$completedTasks", "$totalTasks"],
         },

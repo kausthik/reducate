@@ -1,7 +1,7 @@
-import { StudyRespositoryType } from "../types/study";
+import { StudyRespositoryType, Subject } from "../types/study";
 import { Study } from "../models/study.model";
 import { Types } from "mongoose";
-import { Subject } from "../types/study";
+
 
 class StudyRepository {
 
@@ -16,9 +16,22 @@ class StudyRepository {
   }
 
   // READ
-  async findById(id: string) {
-      return await Study.findById(id).lean();    
+ async findById(id: string) {
+  const study = await Study.findById(id).lean();
+
+  if (!study) {
+    return null;
   }
+
+  return {
+    ...study,
+    _id: study._id.toString(),
+    userId: study.userId.toString(),
+    studiedAt: study.studiedAt.toISOString(),
+    createdAt: study.createdAt.toISOString(),
+    updatedAt: study.updatedAt.toISOString(),
+  };
+}
 
   async findAllOfToday(userId: string) {
     const startOfDay = new Date();
@@ -53,18 +66,6 @@ async findByNormalizedTitle(
     normalizedTitle,
   }).lean();
 }
-
-  // async findByUser(userId: string) {
-    
-  // }
-
-  // async findBySomething(value: string) {}
-
-  // UPDATE
-  // async update(
-  //   id: string,
-  //   data: Record<string, unknown>
-  // ) {}
 
   // DELETE
   async delete(id: string) {

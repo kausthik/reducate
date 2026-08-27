@@ -59,9 +59,7 @@ export async function completeRevisionAction(
   id: string
 ) {
   await connectDB();
-
   const session = await auth();
-
   if (!session?.user?.id) {
     throw new Error("Unauthorized");
   }
